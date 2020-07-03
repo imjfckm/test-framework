@@ -7,7 +7,7 @@ from enum import Enum
 from types import MethodType
 from datetime import datetime
 
-from schema import Schema, Use, And, SchemaError
+from schema import Schema, Use, And, SchemaError, Or
 
 
 class ValidatableParameter(Enum):
@@ -69,10 +69,14 @@ class IOMetric(ValidatableParameter):
     write_CLAT_PERCENTILES = Schema({Use(PercentileMetric): Use(int)})
 
 
+BuildTypes = ["master", "branch", "other"]
+
+
 class ConfigParameter(ValidatableParameter):
     CAS_VERSION = Schema(Use(str))
     DUT = Schema(Use(str))
     TEST_NAME = Schema(str)
+    BUILD_TYPE = Schema(Or(*BuildTypes))
     CACHE_CONFIG = Schema(
         {"cache_mode": Use(str), "cache_line_size": Use(str), "cleaning_policy": Use(str)}
     )
