@@ -113,6 +113,10 @@ class MetricContainer:
 
                 if isinstance(v, dict):
                     v = stringify_dict(v)
+                elif isinstance(v, int):
+                    pass
+                elif isinstance(v, float):
+                    pass
                 else:
                     v = str(v)
 
