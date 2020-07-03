@@ -78,7 +78,11 @@ class ConfigParameter(ValidatableParameter):
     TEST_NAME = Schema(str)
     BUILD_TYPE = Schema(Or(*BuildTypes))
     CACHE_CONFIG = Schema(
-        {"cache_mode": Use(str), "cache_line_size": Use(str), "cleaning_policy": Use(str)}
+        {
+            "cache_mode": Use(str),
+            "cache_line_size": Use(str),
+            "cleaning_policy": Use(str),
+        }
     )
     CACHE_TYPE = Schema(Use(str))
     CORE_TYPE = Schema(Use(str))
@@ -97,7 +101,9 @@ class MetricContainer:
 
     def insert_metric(self, metric, kind):
         if not isinstance(kind, self.metric_type):
-            raise Exception(f"Invalid metric type. Expected: {self.metric_type}, got: {type(kind)}")
+            raise Exception(
+                f"Invalid metric type. Expected: {self.metric_type}, got: {type(kind)}"
+            )
 
         if kind.value:
             metric = kind.value.validate(metric)
