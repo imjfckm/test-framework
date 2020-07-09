@@ -57,11 +57,16 @@ def create_partition_table(device, partition_table_type: PartitionTable = Partit
     TestRun.LOGGER.info(
         f"Creating partition table ({partition_table_type.name}) for device: {device.system_path}")
     cmd = f'parted --script {device.system_path} mklabel {partition_table_type.name}'
-    TestRun.executor.run_expect_success(cmd)
-    device.partition_table = partition_table_type
-    TestRun.LOGGER.info(
-        f"Successfully created {partition_table_type.name} "
-        f"partition table on device: {device.system_path}")
+    output = TestRun.executor.run(cmd)
+    if output.exit_code == 0:
+        TestRun.LOGGER.info(
+            f"Successfully created {partition_table_type.name} "
+            f"partition table on device: {device.system_path}")
+        return True
+
+    TestRun.LOGGER.error(
+        f"Could not create partition table: {output.stderr}\n{output.stdout}")
+    return False
 
 
 def get_partition_path(parent_dev, number):
